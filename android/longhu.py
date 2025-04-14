@@ -3,6 +3,8 @@ from time import sleep
 
 from appium.webdriver.common.appiumby import AppiumBy
 from android.base_test import AppiumHelper
+import threading
+from concurrent.futures import ThreadPoolExecutor
 
 
 class LongHuHelper:
@@ -66,9 +68,18 @@ class LongHuHelper:
         except Exception as e:
             pass
 
-if __name__ == '__main__':
-    # longhu_helper = LongHuHelper(udid="localhost:5555")
-    # longhu_helper.qian_dao()
 
-    longhu_helper2 = LongHuHelper(udid="localhost:5556")
-    longhu_helper2.qian_dao()
+def run_helper(udid):
+    helper = LongHuHelper(udid=udid)
+    helper.qian_dao()
+
+
+if __name__ == '__main__':
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        # 提交任务
+        future1 = executor.submit(run_helper, "localhost:5555")
+        future2 = executor.submit(run_helper, "localhost:5556")
+
+        # 等待任务完成
+        future1.result()
+        future2.result()
