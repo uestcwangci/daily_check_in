@@ -1,3 +1,4 @@
+import json
 import time
 from typing import Union, Dict
 
@@ -9,6 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.actions import interaction
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.actions.pointer_input import PointerInput
+from android import logger
 
 
 class AppiumHelper:
@@ -168,3 +170,84 @@ class AppiumHelper:
                 self.driver.press_keycode(47, 50)  # Ctrl + V
 
         return True
+
+    def _call_native(self, call_type: str, **kwargs):
+        """
+        Consolidated method to call native functionality via broadcast intents.
+
+        Args:
+            call_type: Type of call - "static", "instance", or "jsapi"
+            **kwargs: Arguments specific to each call type:
+                - static: class_name, method, params (optional)
+                - instance: class_name, method, instance_method (optional), params (optional)
+                - jsapi: service_name, action_name, params (optional)
+
+        Returns:
+            None
+        """
+        method_call = {"type": call_type}
+
+        if call_type == "static" or call_type == "instance":
+            """
+            数据结构示例:
+            {
+                "type": "static",
+                "className": "com.alibaba.android.dingtalkbase.tools.AndTools",
+                "method": "showToast",
+                "params": [
+                    {"type": "string", "value": "Hello World"}
+                ]
+            }
+            """
+            class_name = kwargs.get("class_name")
+            method = kwargs.get("method")
+
+            if not class_name or not method:
+                raise ValueError(f"For {call_type} calls, class_name and method are required")
+
+            method_call["className"] = class_name
+            method_call["method"] = method
+            method_call["params"] = kwargs.get("params")
+
+            if call_type == "instance":
+                method_call["instanceMethod"] = kwargs.get("instance_method", "getInstance")
+
+        elif call_type == "jsapi":
+            service_name = kwargs.get("service_name")
+            action_name = kwargs.get("action_name")
+
+            if not service_name or not action_name:
+                raise ValueError("For jsapi calls, service_name and action_name are required")
+
+            method_call["jsapiParams"] = {
+                "serviceName": service_name,
+                "actionName": action_name,
+                "params": kwargs.get("params")
+            }
+        else:
+            raise ValueError(f"Unsupported call type: {call_type}")
+
+        # Convert method_call to a properly escaped JSON string
+        json_string = json.dumps(method_call, ensure_ascii=False)
+        full_command = f"am broadcast -a appium.to.dingtalk.ACTION -p com.alibaba.android.rimet --receiver-permission com.alibaba.android.rimet.APPIUM_PERMISSION --es methodCall '{json_string}'"
+        broadcast_command = {
+            "command": full_command
+        }
+
+        result = self.driver.execute_script('mobile: shell', broadcast_command)
+        logger.info(f"Shell command result: {result}")
+        return result
+
+    def call_jsapi(self, service_name: str, action_name: str, params: Dict = None):
+        """
+        调用 JSAPI。
+
+        Args:
+            service_name: 服务名。
+            action_name: 动作名。
+            params: 参数。
+
+        Returns:
+            None
+        """
+        self._call_native("jsapi", service_name=service_name, action_name=action_name, params=params)
