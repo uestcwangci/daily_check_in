@@ -3,7 +3,6 @@ from time import sleep
 
 from appium.webdriver.common.appiumby import AppiumBy
 from android.base_test import AppiumHelper
-import threading
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -45,6 +44,7 @@ class LongHuHelper:
         sleep(2)
         wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/img_item")[1].click()
         # 点击“点击抽奖”按钮
+        sleep(2)
         wait_for_find(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiSelector().text("点击抽奖")').click()
         # 点击“去签到”按钮
         wait_for_find(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiSelector().text("去签到")').click()
@@ -53,6 +53,7 @@ class LongHuHelper:
         self.appium_helper.driver.back()
         # 再进入抽奖页面
         wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/img_item")[1].click()
+        sleep(2)
         # 点击“点击抽奖”按钮
         wait_for_find(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiSelector().text("点击抽奖")').click()
         sleep(10)
