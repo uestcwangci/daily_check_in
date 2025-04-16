@@ -55,17 +55,18 @@ class LongHuHelper:
         self.appium_helper.driver.back()
         # 再进入抽奖页面
         wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/img_item")[1].click()
-        # 向下滑动
-        self.appium_helper.driver.swipe(400, 900, 400, 700)
         sleep(2)
-        # 点击“点击抽奖”按钮
-        wait_for_find(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiSelector().text("点击抽奖")').click()
+        try:
+            # 点击“点击抽奖”按钮
+            wait_for_find(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiSelector().text("点击抽奖")').click()
+        except:
+            self.appium_helper.click(360, 900)
         sleep(10)
         # 返回
         self.appium_helper.driver.back()
         # 点击“签到”按钮
         wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/img_item")[0].click()
-        sleep(3)
+        sleep(10)
         # 退出
         try:
             self.appium_helper.driver.terminate_app(self.appium_helper.driver.capabilities["appPackage"])
@@ -87,4 +88,4 @@ if __name__ == '__main__':
 
         # 等待任务完成
         future1.result()
-        future2.result()
+        # future2.result()
