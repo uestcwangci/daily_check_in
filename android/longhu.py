@@ -44,16 +44,16 @@ class LongHuHelper(QianDaoHelper):
             try:
                 # 点击“点击抽奖”按钮
                 wait_for_find(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiSelector().text("点击抽奖")').click()
-                logging.info(f"{self.udid} 抽奖成功")
+                logging.info(f"{self.udid} 龙湖抽奖成功")
             except:
                 self.appium_helper.click(360, 900)
-                logging.info(f"{self.udid} 抽奖成功")
+                logging.info(f"{self.udid} 龙湖抽奖成功")
             sleep(10)
             # 返回
             self.appium_helper.driver.back()
             # 点击“签到”按钮
             wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/img_item")[0].click()
-            logging.info(f"{self.udid} 签到成功")
+            logging.info(f"{self.udid} 龙湖签到成功")
             sleep(10)
         except Exception as e:
             logging.error(f"Error during qian_dao: {e}")

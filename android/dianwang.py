@@ -11,8 +11,8 @@ from android.base_qiandao_helper import QianDaoHelper
 
 
 class DianWangHelper(QianDaoHelper):
-    def __init__(self, udid='localhost:5555'):
-        super().__init__(appPackage='com.sgcc.wsgw.cn', appActivity='com.sgcc.wsgw.cn', udid=udid)
+    def __init__(self, udid='10.0.0.51:5555'):
+        super().__init__(appPackage='com.sgcc.wsgw.cn', appActivity='com.sgcc.wsgw.rnbundle.activity.HomeReactActivity', udid=udid)
 
     def qian_dao(self):
         wait_for_find = self.appium_helper.wait_for_find
@@ -26,7 +26,7 @@ class DianWangHelper(QianDaoHelper):
             # 返回
             sleep(5)
             self.appium_helper.driver.back()
-            # self.appium_helper.driver.back()
+            self.appium_helper.driver.back()
             self.appium_helper.driver.activate_app(self.appium_helper.driver.capabilities["appPackage"])
             sleep(2)
             # 点击“签到”按钮
