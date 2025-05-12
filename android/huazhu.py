@@ -24,22 +24,30 @@ class HuaZhuHelper(QianDaoHelper):
             wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().description("会员")').click()
             # 点击“签到”按钮
             wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().description("签到")').click()
+            sleep(10)
             # 去掉广告
             self.appium_helper.driver.tap([(230, 915)])
-            sleep(2)
+            sleep(5)
             # 向下滑动
-            self.appium_helper.driver.swipe(400, 900, 400, 600)
+            self.appium_helper.driver.swipe(400, 800, 400, 600)
+            sleep(2)
             # 点击“签到”按钮
-            wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("签到")').click()
+            try:
+                wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("签到")').click()
+            except:
+                self.appium_helper.driver.tap([(360, 915)])
             logging.info(f"{self.udid} 华住签到成功")
             # 点击"立即抽奖"按钮
-            wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector(). textContains("立即抽奖")').click()
+            try:
+                wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector(). textContains("立即抽奖")').click()
+            except:
+                self.appium_helper.driver.tap([(360, 392)])
             logging.info(f"{self.udid} 华住抽奖成功")
-            sleep(3)
+            sleep(5)
         except Exception as e:
             logging.error(f"Error during qian_dao: {e}")
+            raise e
         finally:
-            # 退出
             try:
                 self.appium_helper.driver.terminate_app(self.appium_helper.driver.capabilities["appPackage"])
                 self.appium_helper.driver.quit()

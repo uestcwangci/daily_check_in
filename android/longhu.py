@@ -57,6 +57,7 @@ class LongHuHelper(QianDaoHelper):
             sleep(10)
         except Exception as e:
             logging.error(f"Error during qian_dao: {e}")
+            raise e
         finally:
             # 退出
             try:
