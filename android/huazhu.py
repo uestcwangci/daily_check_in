@@ -29,19 +29,16 @@ class HuaZhuHelper(QianDaoHelper):
             self.appium_helper.driver.tap([(230, 915)])
             sleep(5)
             # 向下滑动
-            self.appium_helper.driver.swipe(400, 800, 400, 600)
+            self.appium_helper.driver.swipe(400, 800, 400, 600, duration=1000)
             sleep(2)
             # 点击“签到”按钮
-            try:
-                wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("签到")').click()
-            except:
-                self.appium_helper.driver.tap([(360, 915)])
+            self.appium_helper.driver.tap([(360, 1094)])
             logging.info(f"{self.udid} 华住签到成功")
+            sleep(5)
+            # 去广告
+            self.appium_helper.driver.tap([(360, 804)])
             # 点击"立即抽奖"按钮
-            try:
-                wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector(). textContains("立即抽奖")').click()
-            except:
-                self.appium_helper.driver.tap([(360, 392)])
+            self.appium_helper.driver.tap([(360, 435)])
             logging.info(f"{self.udid} 华住抽奖成功")
             sleep(5)
         except Exception as e:
