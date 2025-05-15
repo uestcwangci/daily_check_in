@@ -1,5 +1,7 @@
 import functools
 from concurrent.futures import ThreadPoolExecutor
+from time import sleep
+
 from android.longhu import LongHuHelper
 from android.dianwang import DianWangHelper
 from android.huazhu import HuaZhuHelper
@@ -17,9 +19,10 @@ def retry_qiandao(times=2):
         def wrapper(*args):
             for _ in range(times):
                 try:
+                    sleep(2)
                     return func()
                 except Exception as e:
-                    logging.warning(f"Retry failed for {func.__name__} on {args[0].__class__.__name__}: {e}")
+                    logging.warning(f"Retry failed for {func.__name__} on {args[0].__class__.__name__}")
                     continue
             raise Exception(f"Failed to execute {func.__name__} on {args[0].__class__.__name__} after {times} attempts")
 
@@ -43,7 +46,7 @@ def run_helper(udid):
             decorated_qian_dao(helper)
             logging.info(f"Finished qian_dao for {helper_class.__name__}")
         except Exception as e:
-            logging.error(f"Failed qian_dao for {helper_class.__name__}: {e}")
+            logging.error(f"Failed qian_dao for {helper_class.__name__}")
 
 
 if __name__ == "__main__":
