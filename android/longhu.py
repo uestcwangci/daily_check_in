@@ -16,13 +16,25 @@ class LongHuHelper(QianDaoHelper):
         wait_for_finds = self.appium_helper.wait_for_finds
         try:
             # 点击设备按钮
-            sleep(2)
+            sleep(10)
+            # 如果有广告，去掉
+            try:
+                wait_for_find(by=AppiumBy.ID, value="com.longfor.supera:id/img_close").click()
+            except Exception:
+                pass
             # 点击“会员”按钮
             tabs = wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/tab_text")
             for tab in tabs:
                 if '会员' in tab.text:
                     tab.click()
                     break
+            # 点击“签到”按钮
+            sleep(3)
+            wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/img_item")[0].click()
+            logging.info(f"{self.udid} 龙湖签到成功")
+            sleep(10)
+            # 返回
+            self.appium_helper.driver.back()
             # 向下滑动
             self.appium_helper.driver.swipe(400, 900, 400, 600)
             # 点击“抽奖按钮"
@@ -48,12 +60,6 @@ class LongHuHelper(QianDaoHelper):
             except:
                 self.appium_helper.click(360, 900)
                 logging.info(f"{self.udid} 龙湖抽奖成功")
-            sleep(10)
-            # 返回
-            self.appium_helper.driver.back()
-            # 点击“签到”按钮
-            wait_for_finds(by=AppiumBy.ID, value="com.longfor.supera:id/img_item")[0].click()
-            logging.info(f"{self.udid} 龙湖签到成功")
             sleep(10)
         except Exception as e:
             logging.error(f"Error during qian_dao: {e}")

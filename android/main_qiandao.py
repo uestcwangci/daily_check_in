@@ -19,7 +19,7 @@ def retry_qiandao(times=2):
         def wrapper(*args):
             for _ in range(times):
                 try:
-                    sleep(2)
+                    sleep(5)
                     return func()
                 except Exception as e:
                     logging.warning(f"Retry failed for {func.__name__} on {args[0].__class__.__name__}")

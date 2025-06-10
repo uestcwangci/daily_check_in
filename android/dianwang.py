@@ -32,23 +32,21 @@ class DianWangHelper(QianDaoHelper):
             # 点击“签到”按钮
             wait_for_find(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("签到")').click()
             sleep(10)
-            # 计算今天是不是当月的第8天、第15天、第21天、第28天
-            if datetime.now().day == 8:
-                # 点击第8天抽奖按钮
-                self.appium_helper.driver.tap([(114, 1080)])
-                logging.info(f"{self.udid} 第8天抽奖成功")
-            elif datetime.now().day == 15:
-                # 点击第15天抽奖按钮
-                self.appium_helper.driver.tap([(273, 1080)])
-                logging.info(f"{self.udid} 第15天抽奖成功")
-            elif datetime.now().day == 21:
-                # 点击第21天抽奖按钮
-                self.appium_helper.driver.tap([(432, 1080)])
-                logging.info(f"{self.udid} 第21天抽奖成功")
-            elif datetime.now().day == 28:
-                # 点击第28天抽奖按钮
-                self.appium_helper.driver.tap([(591, 1080)])
-                logging.info(f"{self.udid} 第28天抽奖成功")
+            # 点击第8天抽奖按钮
+            self.appium_helper.driver.tap([(114, 1080)])
+            logging.info(f"{self.udid} 第8天抽奖成功")
+            sleep(2)
+            # 点击第15天抽奖按钮
+            self.appium_helper.driver.tap([(273, 1080)])
+            logging.info(f"{self.udid} 第15天抽奖成功")
+            sleep(2)
+            # 点击第21天抽奖按钮
+            self.appium_helper.driver.tap([(432, 1080)])
+            logging.info(f"{self.udid} 第21天抽奖成功")
+            sleep(2)
+            # 点击第28天抽奖按钮
+            self.appium_helper.driver.tap([(591, 1080)])
+            logging.info(f"{self.udid} 第28天抽奖成功")
             sleep(5)
         except Exception as e:
             logging.error(f"Error during qian_dao: {e}")
